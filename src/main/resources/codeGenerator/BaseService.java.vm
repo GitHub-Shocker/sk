@@ -1,0 +1,92 @@
+package ${cfg.ServicePackage};
+
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.qlchat.mybatis.util.IdGeneratorUtil;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import com.qlchat.bbs.util.DTOUtil;
+import com.qlchat.bbs.util.EmptyUtil;
+##import ${cfg.VOPackage}.${table.entityName}VO;
+##import ${cfg.DTOPackage}.${table.entityName}DTO;
+import com.qlchat.component.web.support.PageRes;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * $!{table.comment}Service
+ *
+ * @author ${author}
+ * @date ${date}
+ * @see <a href=""></a>
+ **/
+@Service
+public class ${table.entityName}ServiceImpl extends ServiceImpl<${table.mapperName}, ${entity}> {
+
+
+    /**
+     * 分页查询
+     * @param dto dto
+     * @return  结果
+     */
+    public PageRes<${entity}VO> page(${table.entityName}DTO dto) {
+        if (EmptyUtil.isEmpty(dto)) {
+            return new PageRes<>();
+        }
+        LambdaQueryWrapper<${entity}> wrapper = Wrappers.lambdaQuery(${entity}.class);
+        Page<${entity}> pageData = page(new Page<>(dto.getPage(), dto.getSize()), wrapper);
+        long totalCount = pageData.getTotal();
+        List<${entity}> records = pageData.getRecords();
+        List<${entity}VO> vos = DTOUtil.transform(records, ${entity}VO.class);
+        PageRes<${entity}VO> pageRes = new PageRes<>();
+        pageRes.setList(vos);
+        pageRes.setCount(totalCount);
+        return pageRes;
+    }
+
+    /**
+     * 保存
+     * @param dto dto
+     * @return 结果
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean save(${entity}DTO dto) {
+        if (EmptyUtil.isEmpty(dto)) {
+            return false;
+        }
+        Long id = dto.getId();
+        if (EmptyUtil.isEmpty(id)) {
+            ${entity} po = DTOUtil.transform(dto, ${entity}.class);
+            po.setId(IdGeneratorUtil.getLongGenSid());
+            return save(po);
+        }
+        ${entity} po = new ${entity}();
+        po.setId(id);
+        //添加修改字段
+        return this.updateById(po);
+    }
+
+    /**
+    * 删除
+    *
+    * @param id id
+    * @param operator   操作
+    * @return 结果
+    */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean delete(Long id, Long operator) {
+        if (EmptyUtil.isHadEmpty(id)) {
+            return false;
+        }
+        ${entity} po = new ${entity}();
+        po.setId(id);
+        po.setUpdateBy(operator);
+        po.setDeleted(true);
+        return this.updateById(po);
+    }
+}

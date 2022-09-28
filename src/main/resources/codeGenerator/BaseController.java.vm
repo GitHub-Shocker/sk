@@ -58,7 +58,7 @@ public class ${table.entityName}Controller implements ${table.entityName}Client 
      * @param id 请求参数
      */
     @ApiOperation("删除：${table.comment}记录")
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Long id) {
         ${table.entityPath}Service.delete(id);
     }

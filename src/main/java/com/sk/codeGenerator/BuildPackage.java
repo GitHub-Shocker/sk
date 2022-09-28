@@ -55,6 +55,10 @@ public class BuildPackage {
         return parentPackage + controllerPackage + StrUtil.BACKSLASH + this.getBusinessPackage();
     }
 
+    public String getControllerPackagePath() {
+        return getParentPackagePath() + StrUtil.BACKSLASH  + controllerPackage + StrUtil.BACKSLASH + this.getBusinessPackage()+ StrUtil.BACKSLASH;
+    }
+
     public String getMapperPackage() {
         return mapperPackage + StrUtil.DOT + this.getBusinessPackage();
     }
@@ -67,16 +71,36 @@ public class BuildPackage {
         return servicePackage + StrUtil.DOT + this.getBusinessPackage();
     }
 
+    public String getServicePackagePath() {
+        return getParentPackagePath() + StrUtil.BACKSLASH + servicePackage + StrUtil.BACKSLASH + this.getBusinessPackage() + StrUtil.BACKSLASH;
+    }
+
     public String getServiceImplPackage() {
         return this.getServicePackage() + StrUtil.DOT + serviceImplPackage;
     }
 
+    public String getServiceImplPackagePath() {
+        return getServicePackagePath() + serviceImplPackage + StrUtil.BACKSLASH;
+    }
+
+    public String getVoPackagePath() {
+        return getParentPackagePath() + StrUtil.BACKSLASH + voPackage + StrUtil.BACKSLASH + this.getBusinessPackage() + StrUtil.BACKSLASH;
+    }
+
     public String getVoPackage() {
-        return parentPackage + StrUtil.DOT + voPackage + StrUtil.DOT + this.getBusinessPackage() +StrUtil.DOT;
+        return parentPackage + StrUtil.DOT + voPackage + StrUtil.DOT + this.getBusinessPackage();
+    }
+
+    public String getParentPackagePath() {
+        return packageToPath(parentPackage);
     }
 
     public String getDtoPackage() {
-        return parentPackage + dtoPackage + StrUtil.BACKSLASH + this.getBusinessPackage();
+        return parentPackage + StrUtil.DOT + dtoPackage + StrUtil.DOT + this.getBusinessPackage();
+    }
+
+    public String getDtoPackagePath() {
+        return getParentPackagePath() + StrUtil.BACKSLASH + dtoPackage + StrUtil.BACKSLASH + this.getBusinessPackage() + StrUtil.BACKSLASH;
     }
 
     /**
@@ -90,5 +114,9 @@ public class BuildPackage {
             throw new RuntimeException("表名不能为空");
         }
         return StrUtil.replace(tableName, "t_", "");
+    }
+
+    public static String packageToPath(String relativePath) {
+        return relativePath.replace(".", "/");
     }
 }

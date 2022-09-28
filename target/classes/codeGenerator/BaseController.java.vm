@@ -1,0 +1,66 @@
+package ${package.Controller};
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+##import ${package.vo}.${table.entityName}VO;
+##import ${cfg.DTOPackage}.${table.entityName}DTO;
+##import ${cfg.ServicePackage}.${table.entityName}Service;
+
+/**
+ * $!{table.comment}控制器
+ *
+ * @author ${author}
+ * @date ${date}
+ * @see <a href=""></a>
+ **/
+@Api(tags = "$!{table.comment} API")
+@RestController
+@RequestMapping("/${table.entityPath}")
+@RequiredArgsConstructor
+public class ${table.entityName}Controller implements ${table.entityName}Client {
+
+    private I${table.entityName}Service ${table.entityPath}Service;
+
+    /**
+     * 查询：${table.comment}列表
+     *
+     * @param dto   dto
+     * @return 结果
+     */
+    @ApiOperation("查询：${table.comment}列表")
+    @PostMapping("/page")
+    public PageRes<${table.entityName}VO> page(@RequestBody @Valid ${table.entityName}DTO dto) {
+        return ${table.entityPath}Service.page(dto);
+    }
+
+    /**
+     * 保存或修改：${table.comment}记录
+     *
+     * @param dto dto
+     */
+    @ApiOperation("保存或修改：${table.comment}记录")
+    @PostMapping("saveOrUpdate")
+    public void saveOrUpdate(@RequestBody @Valid ${table.entityName}DTO dto) {
+        ${table.entityPath}Service.save(dto);
+    }
+
+    /**
+     * 删除：${table.comment}记录
+     *
+     * @param id 请求参数
+     */
+    @ApiOperation("删除：${table.comment}记录")
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable Long id) {
+        ${table.entityPath}Service.delete(id);
+    }
+
+}
